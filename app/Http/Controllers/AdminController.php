@@ -7,29 +7,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
-    // public function loginForm()
-    // {
-    //     return view('admin.login');
-    // }
-
-    // public function loginProcess(Request $request)
-    // {
-    //     $credentials = $request->only('email', 'password');
-
-    //     if (Auth::attempt($credentials)) {
-    //         return redirect()->route('admin.dashboard');
-    //     }
-
-    //     return back()->with('error', 'Invalid email or password');
-    // }
-
-    // public function logout()
-    // {
-    //     Auth::logout();
-
-    //     return redirect()->route('admin.login');
-    // }
-
     public function dashboard()
     {
         return view('admins.dashboard');
@@ -47,14 +24,16 @@ class AdminController extends Controller
             'password' => 'required',
         ]);
 
-        // Validasi kredensial
         if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password])) {
+            session()->flash('success', 'Berhasil login!');
             return redirect()->route('dashboard');
         }
 
-        // Jika gagal login
-        return back()->withErrors(['email' => 'Email atau Password salah.'])->with('failed', "Email atau Password salah");
+        return back()
+            ->withErrors(['email' => 'Email atau Password salah.'])
+            ->with('failed', 'Email atau Password salah');
     }
+
 
     public function logout()
     {

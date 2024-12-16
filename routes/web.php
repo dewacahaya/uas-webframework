@@ -32,8 +32,21 @@ Route::get('logout', [AdminController::class, 'logout'])->name('admin.logout');
 
 // Admin Dashboard
 Route::middleware('auth')->group(function () {
+    // DASHBOARD
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    // BUSANA
     Route::get('admin/busanas', [BusanaController::class, 'index'])->name('busana.index');
+    Route::get('admin/busana/create', [BusanaController::class, 'create'])->name('busana.create');
+    Route::get('admin/busana/store', [BusanaController::class, 'store'])->name('busana.store');
+    Route::get('admin/busanas/edit/{busana_id}', [BusanaController::class, 'edit'])->name('busana.edit');
+    Route::get('admin/busanas/update/{busana_id}', [BusanaController::class, 'update'])->name('busana.update');
+    Route::get('admin/busanas/show/{busana_id}', [BusanaController::class, 'show'])->name('busana.show');
+    Route::get('admin/busanas/destroy/{busana_id}', [BusanaController::class, 'destroy'])->name('busana.destroy');
+
+    // ORDERS
     Route::get('admin/orders', [OrderController::class, 'index'])->name('orders.index');
+
+    // REPORTS
     Route::get('admin/reports', [ReportController::class, 'index'])->name('reports.index');
 });

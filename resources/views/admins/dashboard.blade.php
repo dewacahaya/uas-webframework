@@ -53,37 +53,48 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <div class="card">
+                <div class="card shadow">
                     <div class="card-body">
-                        <h5 class="card-title">Quick Links</h5>
-                        <ul class="list-unstyled">
-                            <li><a href="" class="text-decoration-none"><i class="bi bi-person-circle me-2"></i>Admin
-                                    Profile</a></li>
-                            <li><a href="" class="text-decoration-none"><i class="bi bi-list-ul me-2"></i>Menus</a>
-                            </li>
-                            <li><a href="{{ route('admin.logout') }}" class="text-decoration-none"><i
-                                        class="bi bi-box-arrow-left me-2"></i>Logout</a>
-                            </li>
-                        </ul>
+                        <h5 class="card-title">Available Stock</h5>
+                        <table class="table border-primary ">
+                            <tr>
+                                <td>hai</td>
+                                <td class="text-danger text-center fw-bold">hai</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card">
+                <div class="card shadow">
                     <div class="card-body">
-                        <h5 class="card-title">Quick Links</h5>
-                        <ul class="list-unstyled">
-                            <li><a href="" class="text-decoration-none"><i class="bi bi-person-circle me-2"></i>Admin
-                                    Profile</a></li>
-                            <li><a href="" class="text-decoration-none"><i class="bi bi-list-ul me-2"></i>Menus</a>
-                            </li>
-                            <li><a href="{{ route('admin.logout') }}" class="text-decoration-none"><i
-                                        class="bi bi-box-arrow-left me-2"></i>Logout</a>
-                            </li>
-                        </ul>
+                        <h4 class="">Omzet Penjualan</h4>
+                        <h1 class="p-4 fw-semibold">Rp. 10.000.000</h1>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('success'))
+                Swal.fire({
+                    title: 'Sukses!',
+                    text: "{{ session('success') }}",
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            @elseif (session('failed'))
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: "{{ session('failed') }}",
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            @endif
+        });
+    </script>
+@endpush
