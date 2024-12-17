@@ -24,13 +24,15 @@
                         <h3 class="">Halaman Data Busana</h3>
                     </div>
 
-                    <div class="d-flex justify-content-end align-items-center mb-3">
-                        <a href="{{ route('busana.create') }}" class="btn btn-primary me-2">Tambah Busana</a>
-                        <form class="d-flex" method="GET" action="{{ route('busana.index') }}" role="search">
+                    <div class="d-flex flex-column justify-content-end align-items-end mb-3">
+                        <a href="{{ route('busana.create') }}" class="btn btn-primary mb-3">Tambah
+                            Busana</a>
+                        <form class="d-flex fs-6" method="GET" action="{{ route('busana.index') }}" role="search">
                             <input class="form-control me-2" type="search" name="search" placeholder="Search"
                                 aria-label="Search" value="{{ request('search') }}">
                             <button class="btn btn-success" type="submit">Search</button>
                         </form>
+
                     </div>
 
 

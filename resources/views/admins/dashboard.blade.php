@@ -5,7 +5,7 @@
     <div class="container-fluid" style="margin-top: 80px">
         <h1 class="mb-4">Dashboard</h1>
         <div class="container my-4">
-            <div class="row g-4"> <!-- g-4 memberikan gap antar card -->
+            <div class="row g-4">
                 <!-- Admin Card -->
                 <div class="col-md-3">
                     <div class="card shadow-sm text-white text-center" style="background-color: #16A2B7;">
@@ -58,8 +58,8 @@
                         <h5 class="card-title">Available Stock</h5>
                         <table class="table border-primary ">
                             <tr>
-                                <td>hai</td>
-                                <td class="text-danger text-center fw-bold">hai</td>
+                                <td>Kipas Tari</td>
+                                <td class="text-danger text-center fw-bold">Stok Habis</td>
                             </tr>
                         </table>
                     </div>

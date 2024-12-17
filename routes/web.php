@@ -35,6 +35,10 @@ Route::middleware('auth')->group(function () {
     // DASHBOARD
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
+    // PROFILE
+    Route::get('/admin/profile', [AdminController::class, 'editProfile'])->name('admins.profile');
+    Route::post('/admin/profile/update/{admin_id}', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
+
     // BUSANA
     Route::get('admin/busanas', [BusanaController::class, 'index'])->name('busana.index');
     Route::get('admin/busana/create', [BusanaController::class, 'create'])->name('busana.create');

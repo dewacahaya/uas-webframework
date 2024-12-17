@@ -72,6 +72,12 @@
                         <i class="bi bi-speedometer me-3 fs-5"></i> Dashboard
                     </a>
                 </li>
+                <li class="py-3 {{ Request::is('admin/profile') ? 'bg-primary' : '' }}">
+                    <a href="{{ route('admins.profile') }}"
+                        class="text-decoration-none text-white d-flex align-items-center ps-3">
+                        <i class="bi bi-person-circle me-3 fs-5"></i> Profile
+                    </a>
+                </li>
                 <li class="py-3 {{ Request::is('admin/busanas') ? 'bg-primary' : '' }}">
                     <a href="{{ route('busana.index') }}"
                         class="text-decoration-none text-white d-flex align-items-center ps-3">
