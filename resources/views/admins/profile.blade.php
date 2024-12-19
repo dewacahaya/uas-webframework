@@ -1,8 +1,8 @@
 @extends('layouts.admaster')
 
 @section('content')
-    <div class="container-fluid h-100 mt-5">
-        <h2 class="mb-4 mt-3">Halaman Profile Admin</h2>
+    <div class="container-fluid h-100">
+        <h2 class="mb-4">Halaman Profile Admin</h2>
         <div class="row">
             <div class="col-md-12 mb-3">
                 <div class="card mb-4 shadow">

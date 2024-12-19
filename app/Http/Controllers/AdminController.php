@@ -31,7 +31,7 @@ class AdminController extends Controller
         // Validasi input
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:admins,email,' . $admin_id, // Pastikan email unik kecuali untuk admin ini
+            'email' => 'required|email|unique:users,email,' . $admin_id,
             'password' => 'nullable|string|confirmed',
         ]);
 

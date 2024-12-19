@@ -2,7 +2,7 @@
 @extends('layouts.admaster')
 
 @section('content')
-    <div class="container-fluid" style="margin-top: 80px">
+    <div class="container-fluid">
         <h1 class="mb-4">Dashboard</h1>
         <div class="container my-4">
             <div class="row g-4">
