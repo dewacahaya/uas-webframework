@@ -2,37 +2,55 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
-    // public function loginForm()
-    // {
-    //     return view('admin.login');
-    // }
-
-    // public function loginProcess(Request $request)
-    // {
-    //     $credentials = $request->only('email', 'password');
-
-    //     if (Auth::attempt($credentials)) {
-    //         return redirect()->route('admin.dashboard');
-    //     }
-
-    //     return back()->with('error', 'Invalid email or password');
-    // }
-
-    // public function logout()
-    // {
-    //     Auth::logout();
-
-    //     return redirect()->route('admin.login');
-    // }
-
     public function dashboard()
     {
         return view('admins.dashboard');
+    }
+
+    public function editProfile()
+    {
+        $admin = Auth::user(); // Ambil admin yang sedang login
+        return view('admins.profile', compact('admin'));
+    }
+
+    public function show($admin_id)
+    {
+        $admin = User::findOrFail($admin_id); // Menangani ID yang tidak ditemukan
+        return view('admins.profile', compact('admin'));
+    }
+
+    public function updateProfile(Request $request, $admin_id)
+    {
+        // Validasi input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $admin_id,
+            'password' => 'nullable|string|confirmed',
+        ]);
+
+        // Siapkan data untuk update
+        $updateData = [
+            'name' => $request->name,
+            'email' => $request->email,
+        ];
+
+        // Tambahkan password jika diisi
+        if ($request->password) {
+            $updateData['password'] = bcrypt($request->password);
+        }
+
+        // Gunakan Query Builder untuk mengupdate data
+        DB::table('users')->where('id', $admin_id)->update($updateData);
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('admins.profile')->with('success', 'Data berhasil diubah!');
     }
 
     public function index()
@@ -47,14 +65,16 @@ class AdminController extends Controller
             'password' => 'required',
         ]);
 
-        // Validasi kredensial
         if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password])) {
+            session()->flash('success', 'Berhasil login!');
             return redirect()->route('dashboard');
         }
 
-        // Jika gagal login
-        return back()->withErrors(['email' => 'Email atau Password salah.'])->with('failed', "Email atau Password salah");
+        return back()
+            ->withErrors(['email' => 'Email atau Password salah.'])
+            ->with('failed', 'Email atau Password salah');
     }
+
 
     public function logout()
     {

@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('busana_id');
-            $table->foreign('busana_id')->references('id')->on('busanas');
+            $table->foreign('busana_id')->references('id')->on('busanas')->onDelete('cascade');
             $table->integer('bulan');
             $table->bigInteger('tahun');
-            $table->bigInteger('total_pesanan');
-            $table->decimal('total_penjualan');
+            $table->integer('total_pesanan')->default(0);
+            $table->decimal('total_penjualan', 15, 2)->default(0);
             $table->dateTime('created_at');
         });
 

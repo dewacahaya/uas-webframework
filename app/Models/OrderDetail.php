@@ -20,4 +20,9 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(Busana::class, 'busana_id');
     }
+
+    public function getSubtotalAttribute()
+    {
+        return $this->jumlah * $this->harga;
+    }
 }
