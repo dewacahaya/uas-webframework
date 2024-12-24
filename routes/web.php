@@ -18,6 +18,14 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
+Route::get('/home', function () {
+    return view('home');
+});
+
+Route::get('/home2', function () {
+    return view('home2');
+});
+
 Route::get('/', function () {
     return view('home');
 })->name('home');

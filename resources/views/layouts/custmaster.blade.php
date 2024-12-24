@@ -20,6 +20,10 @@
     <title>Sri Ratih Collections</title>
 </head>
 
+<header>
+
+</header>
+
 <body>
     @yield('content')
 
@@ -27,5 +31,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @stack('js')
 </body>
+
+<footer>
+    
+</footer>
 
 </html>
