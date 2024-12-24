@@ -39,7 +39,7 @@
 <body>
     <div class="container form-container">
         <div class="form-card">
-            <h4 class="mb-4 fs-3 p-2 text-center fw-bold">Login Ke Dashboard</h4>
+            <h2 class="mb-4 fs-1 text-center fw-bold">Login</h2>
             <form method="POST" action="{{ route('login.proses') }}">
                 @csrf
                 <!-- Input Email -->
