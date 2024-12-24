@@ -20,9 +20,34 @@
     <title>Sri Ratih Collections</title>
 </head>
 
-<header>
+<nav class="navbar navbar-expand-lg py-4" style="background-color: #001F54; color: white;">
+    <div class="container">
+        <!-- Nama Website -->
+        <a class="navbar-brand text-white fw-bold" style="font-size: 30px" href="#">Sri Ratih Collection</a>
 
-</header>
+        <!-- Bagian Ikon -->
+        <div class="d-flex align-items-center">
+            <!-- Keranjang -->
+            <div class="position-relative me-3">
+                <a href="#" class="text-white">
+                    <i class="bi bi-cart3" style="font-size: 1.5rem;"></i>
+                </a>
+                
+            </div>
+
+            <!-- Tas -->
+            <a href="#" class="text-white me-3">
+                <i class="bi bi-bag" style="font-size: 1.5rem;"></i>
+            </a>
+
+            <!-- Menu -->
+            <a href="#" class="text-white">
+                <i class="bi bi-list" style="font-size: 1.5rem;"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+
 
 <body>
     @yield('content')
@@ -32,8 +57,31 @@
     @stack('js')
 </body>
 
-<footer>
-    
+<footer class="py-4" style="background-color: #6889B1; color: white; margin-top : 120px;">
+    <div class="container text-center text-md-start">
+        <!-- Nama dan Alamat -->
+        <h5 class="fw-bold">Sri Ratih Collection</h5>
+        <p class="mb-4">
+            Jl. Yudistira No.10, Sukawati, Kec. Sukawati, Kabupaten Gianyar, Bali 80582
+        </p>
+
+        <!-- Ikon Media Sosial -->
+        <div class="d-flex justify-content-center justify-content-md-start">
+            <a href="#" class="text-white me-3" style="font-size: 1.5rem;">
+                <i class="bi bi-facebook"></i>
+            </a>
+            <a href="#" class="text-white me-3" style="font-size: 1.5rem;">
+                <i class="bi bi-linkedin"></i>
+            </a>
+            <a href="#" class="text-white me-3" style="font-size: 1.5rem;">
+                <i class="bi bi-youtube"></i>
+            </a>
+            <a href="#" class="text-white me-3" style="font-size: 1.5rem;">
+                <i class="bi bi-instagram"></i>
+            </a>
+        </div>
+    </div>
 </footer>
+
 
 </html>

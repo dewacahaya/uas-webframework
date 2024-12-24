@@ -4,7 +4,7 @@
 
 <div class="text-center mt-5" style="padding: 0; margin: 0;">
 
-    <h1 class="font-weight-bold pt-5 pt-4" style="font-size: 60px">Sri Ratih Collection</h1>
+    <h1 class="font-weight-bold pt-3" style="font-size: 60px">Sri Ratih Collection</h1>
     
 
     <p class="text-muted py-4" style="font-size: 1.2rem;">Pusat Busana Adat Bali</p>
