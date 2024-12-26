@@ -53,6 +53,7 @@ class AdminController extends Controller
         return redirect()->route('admins.profile')->with('success', 'Data berhasil diubah!');
     }
 
+
     public function index()
     {
         return view('admins.adlogin');
@@ -60,14 +61,14 @@ class AdminController extends Controller
 
     public function login_proses(Request $request)
     {
-        $request->validate([
+        $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            session()->flash('success', 'Berhasil login!');
-            return redirect()->route('dashboard');
+        if (Auth::guard('web')->attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('/admin/dashboard')->with('success', 'Login Berhasil');
         }
 
         return back()
@@ -75,10 +76,11 @@ class AdminController extends Controller
             ->with('failed', 'Email atau Password salah');
     }
 
-
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::logout();
-        return redirect()->route('login')->with('success', "Berhasil Logout");
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('admin.login')->with('success', "Berhasil Logout");
     }
 }

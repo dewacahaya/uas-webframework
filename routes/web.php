@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BusanaController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
@@ -21,24 +22,15 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/home', function () {
-    return view('home');
-});
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
-Route::get('/master', function () {
-    return view('layouts.admaster');
-});
 
 // Admin Login
-Route::get('login', [AdminController::class, 'index'])->name('login');
+Route::get('admin/login', [AdminController::class, 'index'])->name('admin.login');
 Route::post('login-proses', [AdminController::class, 'login_proses'])->name('login.proses');
-Route::get('logout', [AdminController::class, 'logout'])->name('admin.logout');
+Route::get('admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
 // Admin Dashboard
-Route::middleware('auth')->group(function () {
+Route::middleware(['admin.auth'])->group(function () {
     // DASHBOARD
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
@@ -60,4 +52,29 @@ Route::middleware('auth')->group(function () {
 
     // REPORTS
     Route::get('admin/reports', [ReportController::class, 'index'])->name('reports.index');
+});
+
+
+
+
+
+// Customer Routes
+Route::get('/', [CustomerController::class, 'showHomePage'])->name('customer.home');
+Route::get('/recommendation', [CustomerController::class, 'showRecommendationPage'])->name('customer.recommendation');
+
+
+Route::post('/register', [CustomerController::class, 'register'])->name('customer.register');
+Route::post('/login', [CustomerController::class, 'login'])->name('customer.login');
+Route::post('/logout', [CustomerController::class, 'logout'])->name('customer.logout');
+
+// Protected Routes
+Route::middleware(['customer.auth'])->group(function () {
+    Route::get('/cart', [CustomerController::class, 'showCart'])->name('customer.cart');
+    Route::post('/cart/add/{busana}', [CustomerController::class, 'addToCart'])->name('customer.cart.add');
+    Route::delete('/cart/remove/{busana}', [CustomerController::class, 'removeFromCart'])->name('customer.cart.remove');
+
+    Route::get('/orders', [OrderController::class, 'showOrders'])->name('customer.orders');
+    Route::post('/orders/create', [OrderController::class, 'createOrder'])->name('customer.order.create');
+
+    Route::resource('busanas', BusanaController::class)->except(['destroy']);
 });
