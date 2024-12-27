@@ -22,37 +22,19 @@
                 Preview Busana
             </div>
             <div class="row">
-
-                <div class="col-md-4">
-                    <div class="card">
-                        <img src="{{ asset('images/tari-kecak-home.webp') }}" class="card-img-top rounded"
-                            alt="Tari Topeng Bali">
-                        <div class="card-body" style="text-align: left; padding-left: 10px;">
-                            <h5 class="card-title" style="font-size: 1.2rem;">Full Set Tari Topeng Bali</h5>
-                            <p class="card-text text-muted" style="font-size: 0.9rem;">Deskripsi Produk</p>
+                @foreach ($busanas as $b)
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src="{{ Storage::url($b->gambar) }}"
+                                class="img-fluid card-img-top rounded border-3 border-bottom shadow-sm"
+                                alt="{{ $b->nama_busana }}" style="height: 230px; width: 100%; object-fit: cover;">
+                            <div class="card-body" style="text-align: left; padding-left: 10px;">
+                                <h5 class="card-title" style="font-size: 1.2rem;">{{ $b->nama_busana }}</h5>
+                                <p class="card-text text-muted" style="font-size: 0.9rem;">{{ $b->deskripsi }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <img src="{{ asset('images/tari-kecak-home.webp') }}" class="card-img-top rounded"
-                            alt="Tari Panji Semirang">
-                        <div class="card-body" style="text-align: left; padding-left: 10px;">
-                            <h5 class="card-title" style="font-size: 1.2rem;">Full Set Tari Panji Semirang</h5>
-                            <p class="card-text text-muted" style="font-size: 0.9rem;">Deskripsi Produk</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <img src="{{ asset('images/tari-kecak-home.webp') }}" class="card-img-top rounded"
-                            alt="Tari Legong">
-                        <div class="card-body" style="text-align: left; padding-left: 10px;">
-                            <h5 class="card-title" style="font-size: 1.2rem;">Full Set Tari Legong</h5>
-                            <p class="card-text text-muted" style="font-size: 0.9rem;">Deskripsi Produk</p>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     @endsection

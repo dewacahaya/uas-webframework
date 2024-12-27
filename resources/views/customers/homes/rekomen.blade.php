@@ -21,80 +21,35 @@
         <div class="mt-5">
             <h2 class="fw-bold mb-4">Rekomendasi</h2>
             <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="{{ asset('images/tari-kecak-home.webp') }}" class="card-img-top rounded"
-                            alt="Tari Topeng Bali">
-                        <div class="card-body">
-                            <h5 class="card-title">Full Set Tari Topeng Bali</h5>
-                            <p class="card-text text-muted">Deskripsi Produk</p>
+                @foreach ($recommendations as $rb)
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="{{ Storage::url($rb->gambar) }}"
+                                class="card-img-top rounded border-3 border-bottom shadow-sm" alt="{{ $rb->nama_busana }}"
+                                style="height: 230px; width: 100%; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $rb->nama_busana }}</h5>
+                                <p class="card-text text-muted">{{ $rb->deskripsi }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="{{ asset('images/tari-kecak-home.webp') }}" class="card-img-top rounded"
-                            alt="Tari Panji Semirang">
-                        <div class="card-body">
-                            <h5 class="card-title">Full Set Tari Panji Semirang</h5>
-                            <p class="card-text text-muted">Deskripsi Produk</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="{{ asset('images/tari-kecak-home.webp') }}" class="card-img-top rounded"
-                            alt="Tari Legong">
-                        <div class="card-body">
-                            <h5 class="card-title">Full Set Tari Legong</h5>
-                            <p class="card-text text-muted">Deskripsi Produk</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="{{ asset('images/tari-kecak-home.webp') }}" class="card-img-top rounded"
-                            alt="Gelungan Margapati">
-                        <div class="card-body">
-                            <h5 class="card-title">Gelungan Margapati</h5>
-                            <p class="card-text text-muted">Deskripsi Produk</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="{{ asset('images/tari-kecak-home.webp') }}" class="card-img-top rounded"
-                            alt="Gelungan Cendrawasih">
-                        <div class="card-body">
-                            <h5 class="card-title">Gelungan Cendrawasih</h5>
-                            <p class="card-text text-muted">Deskripsi Produk</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="{{ asset('images/tari-kecak-home.webp') }}" class="card-img-top rounded"
-                            alt="Badong Tari">
-                        <div class="card-body">
-                            <h5 class="card-title">Badong Tari</h5>
-                            <p class="card-text text-muted">Deskripsi Produk</p>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
+
+    {{-- REKOMENDASI KHUSUS --}}
     <div class="container mt-5">
         <h2 class="fw-bold mb-4">Rekomendasi</h2>
         <div class="row">
             <!-- Kolom Gambar Utama -->
             <div class="col-md-6 d-flex align-items-stretch">
                 <div class="card w-100">
-                    <img src="{{ asset('images/tari-kecak-home.webp') }}" class="card-img-top rounded"
-                        alt="Full Set Kostum Tari Kijang" style="height: 100%; object-fit: cover;">
+                    <img src="{{ Storage::url($specialMain->gambar) }}" class="card-img-top rounded"
+                        alt="{{ $specialMain->nama_busana }}" style="height: 100%; object-fit: cover;">
                     <div class="card-body" style="font-size: 1.25rem;">
-                        <h5 class="card-title fw-bold" style="font-size: 1.5rem;">Full Set Kostum Tari Kijang</h5>
-                        <p class="card-text text-muted" style="font-size: 1.1rem;">Deskripsi Produk</p>
+                        <h5 class="card-title fw-bold" style="font-size: 1.5rem;">{{ $specialMain->nama_busana }}</h5>
+                        <p class="card-text text-muted" style="font-size: 1.1rem;">{{ $specialMain->deskripsi }}</p>
                     </div>
                 </div>
             </div>
@@ -103,11 +58,12 @@
                 <div class="row mb-4">
                     <div class="col-12">
                         <div class="card">
-                            <img src="{{ asset('images/tari-kecak-home.webp') }}" class="card-img-top rounded"
-                                alt="Kipas Tari">
+                            <img src="{{ Storage::url($special1->gambar) }}"
+                                class="card-img-top rounded border-3 border-bottom shadow-sm"
+                                alt="{{ $special1->nama_busana }}" style="height: 260px; width: 100%; object-fit: cover;">
                             <div class="card-body">
-                                <h5 class="card-title">Kipas Tari</h5>
-                                <p class="card-text text-muted">Deskripsi Produk</p>
+                                <h5 class="card-title">{{ $special1->nama_busana }}</h5>
+                                <p class="card-text text-muted">{{ $special1->deskripsi }}</p>
                             </div>
                         </div>
                     </div>
@@ -115,15 +71,17 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <img src="{{ asset('images/tari-kecak-home.webp') }}" class="card-img-top rounded"
-                                alt="Stagen Prada/Sabuk Prada Lilit">
+                            <img src="{{ Storage::url($special2->gambar) }}"
+                                class="card-img-top rounded border-3 border-bottom shadow-sm"
+                                alt="{{ $special2->nama_busana }}" style="height: 260px; width: 100%; object-fit: cover;">
                             <div class="card-body">
-                                <h5 class="card-title">Stagen Prada/Sabuk Prada Lilit</h5>
-                                <p class="card-text text-muted">Deskripsi Produk</p>
+                                <h5 class="card-title">{{ $special2->nama_busana }}</h5>
+                                <p class="card-text text-muted">{{ $special2->deskripsi }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

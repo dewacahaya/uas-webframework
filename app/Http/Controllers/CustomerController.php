@@ -15,13 +15,28 @@ use Illuminate\Support\Facades\Validator;
 class CustomerController extends Controller
 {
 
+    // LANDING PAGE
     public function showHomePage()
     {
         $busanas = Busana::all();
         return view('home', compact('busanas'));
     }
+    // END LANDING PAGE
+
+    // RECOMMENDATION PAGE
+    public function showRecommendationPage()
+    {
+        $recommendations = Busana::where('stok', '>', 0)->take(10)->get();
+
+        $special1 = Busana::where('stok', '>', 0)->find(5);
+        $special2 = Busana::where('stok', '>', 0)->find(9);
+        $specialMain = Busana::where('stok', '>', 0)->find(6);
+        return view('customers.homes.rekomen', compact('recommendations', 'special1', 'special2', 'specialMain'));
+    }
+    // END RECOMMENDATION PAGE
 
 
+    // REGISTER / LOGIN FUNCTION
     public function register(Request $request)
     {
         // Validasi input
@@ -75,16 +90,11 @@ class CustomerController extends Controller
 
         return redirect('/')->with('success', 'Logout Berhasil');
     }
+    // END REGISTER / LOGIN FUNCTION
 
     public function busanas()
     {
         return view('customers.homes.busanas');
-    }
-
-    public function showRecommendationPage()
-    {
-        $recommendations = Busana::where('stok', '>', 0)->take(10)->get();
-        return view('customers.homes.rekomen', compact('recommendations'));
     }
 
     public function showCart()
