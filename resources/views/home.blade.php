@@ -11,8 +11,6 @@
 
         <a href="{{ route('customer.recommendation') }}" class="btn btn-dark text-white fw-bold py-2 w-25">Lihat
             produk</a>
-
-
         <div class="mt-5">
             <img src="{{ asset('images/tari-kecak-home.webp') }}" alt="Tari Kecak" class="w-75 rounded-4">
 

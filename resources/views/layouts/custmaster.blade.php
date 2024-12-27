@@ -60,92 +60,106 @@
                     </a>
                 @endif
 
-                <!-- filepath: /d:/INSTIKI/Semester 3/Web Framework/UAS/sri-ratih-collections/resources/views/layouts/custmaster.blade.php -->
+
                 <!-- Modal Popup -->
                 <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel"
                     aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-dialog modal-dialog-centered modal-lg text-dark">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="authModalLabel">Login / Register</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <ul class="nav nav-tabs" id="authTabs" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="login-tab" data-bs-toggle="tab"
-                                            data-bs-target="#login" role="tab" aria-controls="login"
-                                            aria-selected="true">Login</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="register-tab" data-bs-toggle="tab"
-                                            data-bs-target="#register" role="tab" aria-controls="register"
-                                            aria-selected="false">Register</button>
-                                    </li>
-                                </ul>
-                                <div class="tab-content mt-3 text-dark" id="authTabsContent">
-                                    <!-- Login Form -->
-                                    <div class="tab-pane fade show active" id="login" role="tabpanel"
-                                        aria-labelledby="login-tab">
-                                        <form method="POST" action="{{ route('customer.login') }}">
-                                            @csrf
-                                            <div class="form-group">
-                                                <label for="login_email">Email</label>
-                                                <input type="email" name="email" id="login_email"
-                                                    class="form-control" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="login_password">Password</label>
-                                                <input type="password" name="password" id="login_password"
-                                                    class="form-control" required>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary w-100">Login</button>
-                                        </form>
-                                    </div>
-                                    <!-- Register Form -->
-                                    <div class="tab-pane fade" id="register" role="tabpanel"
-                                        aria-labelledby="register-tab">
-                                        <form method="POST" action="{{ route('customer.register') }}">
-                                            @csrf
-                                            <div class="form-group">
-                                                <label for="register_name">Name</label>
-                                                <input type="text" name="name" id="register_name"
-                                                    class="form-control" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="register_email">Email</label>
-                                                <input type="email" name="email" id="register_email"
-                                                    class="form-control" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="register_password">Password</label>
-                                                <input type="password" name="password" id="register_password"
-                                                    class="form-control" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="register_password_confirmation">Confirm Password</label>
-                                                <input type="password" name="password_confirmation"
-                                                    id="register_password_confirmation" class="form-control" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="register_no_telp">No Telp</label>
-                                                <input type="text" name="no_telp" id="register_no_telp"
-                                                    class="form-control" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="register_alamat">Alamat</label>
-                                                <textarea name="alamat" id="register_alamat" class="form-control" rows="2" required></textarea>
-                                            </div>
-                                            <button type="submit" class="btn btn-success w-100">Register</button>
-                                        </form>
-
+                            <div class="row g-0">
+                                <!-- Bagian Gambar -->
+                                <div class="col-md-6 d-none d-md-block">
+                                    <img src="{{ asset('images/tari-kecak-home.webp') }}" alt="Background"
+                                        class="img-fluid h-100 object-fit-cover">
+                                </div>
+                                <!-- Bagian Form -->
+                                <div class="col-md-6 p-5">
+                                    <div class="tab-content" id="authTabsContent">
+                                        <!-- Login Form -->
+                                        <div class="tab-pane fade show active" id="login" role="tabpanel">
+                                            <h3 class="text-center fw-bold mb-3">Welcome</h3>
+                                            <p class="text-center text-muted mb-4">
+                                                We are welcoming you, please sign in first before we can continue.
+                                            </p>
+                                            <form method="POST" action="{{ route('customer.login') }}">
+                                                @csrf
+                                                <div class="mb-3">
+                                                    <input type="email"
+                                                        class="form-control form-control-lg rounded-pill fs-6"
+                                                        name="email" id="login_email" placeholder="Enter your email"
+                                                        required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <input type="password"
+                                                        class="form-control form-control-lg rounded-pill fs-6"
+                                                        name="password" id="login_password" placeholder="Put a password"
+                                                        required>
+                                                </div>
+                                                <button type="submit" class="btn btn-dark w-100 rounded-pill">Sign
+                                                    In</button>
+                                                <p class="text-center mt-3">
+                                                    Don't have any account yet? <a href="#"
+                                                        onclick="switchToRegister()">Sign Up</a>
+                                                </p>
+                                            </form>
+                                        </div>
+                                        <!-- Register Form -->
+                                        <div class="tab-pane fade" id="register" role="tabpanel">
+                                            <h3 class="text-center fw-bold mb-3">Get Started</h3>
+                                            <p class="text-center text-muted mb-4">
+                                                Create your account to get started.
+                                            </p>
+                                            <form method="POST" action="{{ route('customer.register') }}">
+                                                @csrf
+                                                <div class="mb-3">
+                                                    <input type="text"
+                                                        class="form-control form-control-lg rounded-pill fs-6"
+                                                        name="name" id="register_name" placeholder="Enter your name"
+                                                        required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <input type="email"
+                                                        class="form-control form-control-lg rounded-pill fs-6"
+                                                        name="email" id="register_email"
+                                                        placeholder="Enter your email" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <input type="password"
+                                                        class="form-control form-control-lg rounded-pill fs-6"
+                                                        name="password" id="register_password"
+                                                        placeholder="Put a password" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <input type="password" name="password_confirmation"
+                                                        id="register_password_confirmation"
+                                                        class="form-control form-control-lg rounded-pill fs-6"
+                                                        placeholder="Put a confirmation password" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <input type="text"
+                                                        class="form-control form-control-lg rounded-pill fs-6"
+                                                        name="no_telp" id="register_no_telp"
+                                                        placeholder="Enter your phone" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <textarea class="form-control form-control-lg rounded fs-6" name="alamat" id="register_alamat" rows="2"
+                                                        placeholder="Enter your address" required></textarea>
+                                                </div>
+                                                <button type="submit" class="btn btn-dark w-100 rounded-pill">Sign
+                                                    Up</button>
+                                                <p class="text-center mt-3">
+                                                    Already have an account? <a href="#"
+                                                        onclick="switchToLogin()">Sign In</a>
+                                                </p>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </nav>
@@ -155,6 +169,19 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function switchToRegister() {
+            document.getElementById('login').classList.remove('show', 'active');
+            document.getElementById('register').classList.add('show', 'active');
+        }
+
+        function switchToLogin() {
+            document.getElementById('register').classList.remove('show', 'active');
+            document.getElementById('login').classList.add('show', 'active');
+        }
+    </script>
+
 
 
     @stack('js')
