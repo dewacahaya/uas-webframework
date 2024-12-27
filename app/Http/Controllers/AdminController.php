@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Busana;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,13 @@ class AdminController extends Controller
         $soldStock = Busana::join('reports', 'busanas.id', '=', 'reports.busana_id')
             ->sum('reports.total_pesanan');
 
-        return view('admins.dashboard', compact('adminCount', 'busanaCount', 'salesCount', 'soldStock'));
+        // Mengambil data stok busana
+        $availableStock = Busana::select('nama_busana', 'stok')->get();
+
+        // Menghitung total penjualan dari tabel order_details
+        $salesRevenue = OrderDetail::sum('subtotal');
+
+        return view('admins.dashboard', compact('adminCount', 'busanaCount', 'salesCount', 'soldStock', 'availableStock', 'salesRevenue'));
     }
     // END OF DASHBOARD LOGIC
 

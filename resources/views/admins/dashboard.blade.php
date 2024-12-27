@@ -57,10 +57,13 @@
                     <div class="card-body">
                         <h5 class="card-title">Available Stock</h5>
                         <table class="table border-primary ">
-                            <tr>
-                                <td>Kipas Tari</td>
-                                <td class="text-danger text-center fw-bold">Stok Habis</td>
-                            </tr>
+                            @foreach ($availableStock as $busana)
+                                <tr>
+                                    <td>{{ $busana->nama_busana }}</td>
+                                    <td class="text-center fw-bold">{{ $busana->stok > 0 ? $busana->stok : 'Stok Habis' }}
+                                    </td>
+                                </tr>
+                            @endforeach
                         </table>
                     </div>
                 </div>
@@ -68,8 +71,8 @@
             <div class="col-md-6">
                 <div class="card shadow">
                     <div class="card-body">
-                        <h4 class="">Omzet Penjualan</h4>
-                        <h1 class="p-4 fw-semibold">Rp. 10.000.000</h1>
+                        <h4 class="">Sales Revenue</h4>
+                        <h1 class="p-4 fw-semibold">Rp. {{ number_format($salesRevenue, 0, ',', '.') }}</h1>
                     </div>
                 </div>
             </div>
