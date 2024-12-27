@@ -99,8 +99,10 @@ class BusanaController extends Controller
 
 
 
-    public function destroy($id)
+    public function destroy($busana_id)
     {
-        //
+        $busana = Busana::where('id', $busana_id)->delete();
+
+        return redirect()->route('busana.index')->with('deleted', 'Data Berhasil Dihapus!');
     }
 }

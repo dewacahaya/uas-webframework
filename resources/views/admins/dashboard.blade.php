@@ -12,7 +12,7 @@
                         <div class="card-body d-flex flex-column align-items-center justify-content-center">
                             <i class="bi bi-person-circle fs-1 mb-2"></i> <!-- Ikon besar -->
                             <h4 class="mb-0">Admin</h4>
-                            <h1 class="fw-bold">1</h1>
+                            <h1 class="fw-bold">{{ $adminCount }}</h1>
                         </div>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
                         <div class="card-body d-flex flex-column align-items-center justify-content-center">
                             <i class="bi bi-tags fs-1 mb-2"></i>
                             <h4 class="mb-0">Busanas</h4>
-                            <h1 class="fw-bold">1</h1>
+                            <h1 class="fw-bold">{{ $busanaCount }}</h1>
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                         <div class="card-body d-flex flex-column align-items-center justify-content-center">
                             <i class="bi bi-receipt fs-1 mb-2"></i>
                             <h4 class="mb-0">Sales</h4>
-                            <h1 class="fw-bold">1</h1>
+                            <h1 class="fw-bold">{{ $salesCount }}</h1>
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                         <div class="card-body d-flex flex-column align-items-center justify-content-center">
                             <i class="bi bi-bag-check fs-1 mb-2"></i>
                             <h4 class="mb-0">Sold Stock</h4>
-                            <h1 class="fw-bold">1</h1>
+                            <h1 class="fw-bold">{{ $soldStock }}</h1>
                         </div>
                     </div>
                 </div>

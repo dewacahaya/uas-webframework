@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Busana;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,11 +11,22 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
+    // DASHBOARD LOGIC
     public function dashboard()
     {
-        return view('admins.dashboard');
-    }
+        $adminCount = User::count();
+        $busanaCount = Busana::count();
+        $salesCount = Order::count();
 
+        // Menghitung stok yang terjual berdasarkan total_pesanan di tabel report
+        $soldStock = Busana::join('reports', 'busanas.id', '=', 'reports.busana_id')
+            ->sum('reports.total_pesanan');
+
+        return view('admins.dashboard', compact('adminCount', 'busanaCount', 'salesCount', 'soldStock'));
+    }
+    // END OF DASHBOARD LOGIC
+
+    // PROFILE LOGIC
     public function editProfile()
     {
         $admin = Auth::user(); // Ambil admin yang sedang login
@@ -52,8 +65,10 @@ class AdminController extends Controller
         // Redirect dengan pesan sukses
         return redirect()->route('admins.profile')->with('success', 'Data berhasil diubah!');
     }
+    // END OF PROFILE LOGIC
 
 
+    // LOGIN LOGOUT LOGIC
     public function index()
     {
         return view('admins.adlogin');
@@ -83,4 +98,5 @@ class AdminController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('admin.login')->with('success', "Berhasil Logout");
     }
+    // END OF LOGIN LOGOUT LOGIC
 }
