@@ -92,47 +92,91 @@ class CustomerController extends Controller
     }
     // END REGISTER / LOGIN FUNCTION
 
-    public function busanas()
+    // ALL BUSANAS PAGE
+    public function showAllBusanas(Request $request)
     {
-        return view('customers.homes.busanas');
+        $search = $request->input('search');
+
+        // Mengambil data busana dengan pencarian dan stok lebih dari 1
+        $busanas = Busana::when($search, function ($query, $search) {
+            return $query->where('nama_busana', 'like', "%{$search}%")
+                ->orWhere('harga', 'like', "%{$search}%")
+                ->orWhere('deskripsi', 'like', "%{$search}%");
+        })->where('stok', '>', 0)->paginate(10);
+
+        return view('customers.homes.busanas', compact('busanas', 'search'));
     }
+    // END ALL BUSANAS PAGE
 
     public function showCart()
     {
         $cart = session()->get('cart', []);
-        return view('customers.cart', compact('cart'));
+        $grandTotal = array_reduce($cart, function ($carry, $item) {
+            return $carry + ($item['price'] * $item['quantity']);
+        }, 0);
+
+        $shippingOption = session()->get('shipping_option', 'standard');
+
+        return view('customers.transaction.cart', compact('cart', 'grandTotal', 'shippingOption'));
     }
 
-    public function addToCart(Request $request, $busana_id)
+    public function addToCart(Request $request)
     {
-        $busana = Busana::findOrFail($busana_id);
+        $busanaId = $request->input('busana_id');
+        $busana = Busana::find($busanaId);
+
+        if (!$busana) {
+            return redirect()->route('customer.busanas')->with('failed', 'Busana tidak ditemukan.');
+        }
 
         $cart = session()->get('cart', []);
 
-        if (isset($cart[$busana_id])) {
-            $cart[$busana_id]['quantity']++;
+        if (isset($cart[$busanaId])) {
+            $cart[$busanaId]['quantity']++;
         } else {
-            $cart[$busana_id] = [
+            $cart[$busanaId] = [
                 "name" => $busana->nama_busana,
                 "quantity" => 1,
                 "price" => $busana->harga,
-                "image" => $busana->gambar,
+                "image" => $busana->gambar
             ];
         }
 
         session()->put('cart', $cart);
-        return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
+
+        return redirect()->route('customer.cart')->with('success', 'Busana berhasil ditambahkan ke keranjang.');
     }
 
-    public function removeFromCart($busana_id)
+    public function updateCart(Request $request)
     {
-        $cart = session()->get('cart');
+        $busanaId = $request->input('busana_id');
+        $quantity = $request->input('quantity');
+        $shippingOption = $request->input('shipping_option', 'standard');
 
-        if (isset($cart[$busana_id])) {
-            unset($cart[$busana_id]);
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$busanaId])) {
+            $cart[$busanaId]['quantity'] = $quantity;
             session()->put('cart', $cart);
         }
 
-        return redirect()->back()->with('success', 'Produk berhasil dihapus dari keranjang!');
+        session()->put('shipping_option', $shippingOption);
+
+        return response()->json(['status' => 'success', 'message' => 'Keranjang berhasil diperbarui.']);
+    }
+
+    public function removeFromCart(Request $request)
+    {
+        $busanaId = $request->input('busana_id');
+
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$busanaId])) {
+            unset($cart[$busanaId]);
+            session()->put('cart', $cart);
+            return redirect()->route('customer.cart')->with('success', 'Busana berhasil dihapus dari keranjang.');
+        }
+
+        return redirect()->route('customer.cart')->with('failed', 'Busana tidak ditemukan di keranjang.');
     }
 }

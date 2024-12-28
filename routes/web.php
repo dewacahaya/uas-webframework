@@ -69,9 +69,13 @@ Route::post('/logout', [CustomerController::class, 'logout'])->name('customer.lo
 
 // Protected Routes
 Route::middleware(['customer.auth'])->group(function () {
+
+    Route::get('/all-busanas', [CustomerController::class, 'showAllBusanas'])->name('customer.busanas');
+
     Route::get('/cart', [CustomerController::class, 'showCart'])->name('customer.cart');
-    Route::post('/cart/add/{busana}', [CustomerController::class, 'addToCart'])->name('customer.cart.add');
-    Route::delete('/cart/remove/{busana}', [CustomerController::class, 'removeFromCart'])->name('customer.cart.remove');
+    Route::post('/cart/add', [CustomerController::class, 'addToCart'])->name('customer.cart.add');
+    Route::post('/cart/update', [CustomerController::class, 'updateCart'])->name('customer.cart.update');
+    Route::post('/cart/remove', [CustomerController::class, 'removeFromCart'])->name('customer.cart.remove');
 
     Route::get('/orders', [OrderController::class, 'showOrders'])->name('customer.orders');
     Route::post('/orders/create', [OrderController::class, 'createOrder'])->name('customer.order.create');

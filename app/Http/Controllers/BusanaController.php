@@ -12,7 +12,7 @@ class BusanaController extends Controller
     {
         $search = $request->input('search');
 
-        // Mengambil data barang dengan pencarian
+        // Mengambil data busana dengan pencarian
         $busana = Busana::when($search, function ($query, $search) {
             return $query->where('nama_busana', 'like', "%{$search}%")
                 ->orWhere('harga', 'like', "%{$search}%")
