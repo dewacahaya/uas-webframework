@@ -48,8 +48,9 @@
                                     </td>
                                     <td class="text-center">
                                         <input type="number" class="form-control text-center update-cart"
-                                            data-id="{{ $key }}" value="{{ $item['quantity'] }}" min="1"
-                                            style="width: 60px;">
+                                            data-id="{{ $key }}" data-max-stock="{{ $item['max_stock'] }}"
+                                            data-previous-value="{{ $item['quantity'] }}" value="{{ $item['quantity'] }}"
+                                            min="1" style="width: 60px;">
                                     </td>
                                     <td>Rp. {{ number_format($item['price'], 0, ',', '.') }}</td>
                                     <td class="total">Rp.
@@ -90,12 +91,14 @@
                                 <label class="form-check-label border border-2 rounded border-secondary p-2 w-100 fw-bold"
                                     for="pickup">Ambil di Tempat</label>
                             </div>
+                            <input type="hidden" id="hidden-shipping-option" value="{{ $shippingOption }}">
                             <hr>
                             <div class="d-flex justify-content-between">
                                 <span>Total:</span>
                                 <span id="grand-total">Rp {{ number_format($grandTotal, 0, ',', '.') }}</span>
                             </div>
-                            <button type="submit" class="btn btn-dark w-100 mt-3">Checkout</button>
+                            <button type="button" onclick="window.location='{{ route('customer.checkout') }}'"
+                                class="btn btn-dark w-100 mt-3">Checkout</button>
                         </form>
                     </div>
                 </div>
@@ -104,49 +107,6 @@
             <p>Keranjang belanja kosong.</p>
         @endif
     </div>
-
-    {{-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const updateTotal = () => {
-                let grandTotal = 0;
-
-                document.querySelectorAll('.input-group').forEach(group => {
-                    const quantityInput = group.querySelector('.quantity');
-                    const totalCell = group.closest('tr').querySelector('.total');
-                    const price = parseInt(group.dataset.price);
-                    const quantity = parseInt(quantityInput.value);
-
-                    const total = price * quantity;
-                    totalCell.textContent = 'Rp ' + total.toLocaleString('id-ID');
-                    grandTotal += total;
-                });
-
-                document.getElementById('grand-total').textContent = 'Rp ' + grandTotal.toLocaleString('id-ID');
-            };
-
-            document.querySelectorAll('.decrease').forEach(button => {
-                button.addEventListener('click', () => {
-                    const quantityInput = button.nextElementSibling;
-                    let value = parseInt(quantityInput.value);
-                    if (value > 1) {
-                        quantityInput.value = value - 1;
-                        updateTotal();
-                    }
-                });
-            });
-
-            document.querySelectorAll('.increase').forEach(button => {
-                button.addEventListener('click', () => {
-                    const quantityInput = button.previousElementSibling;
-                    let value = parseInt(quantityInput.value);
-                    quantityInput.value = value + 1;
-                    updateTotal();
-                });
-            });
-
-            updateTotal();
-        });
-    </script> --}}
 @endsection
 
 @push('js')
@@ -154,15 +114,33 @@
         document.addEventListener('DOMContentLoaded', function() {
             const shippingOptions = document.querySelectorAll('input[name="shipping"]');
             const grandTotalElement = document.getElementById('grand-total');
+            const hiddenShippingOption = document.getElementById('hidden-shipping-option');
 
             document.querySelectorAll('.update-cart').forEach(input => {
                 input.addEventListener('change', function(e) {
                     e.preventDefault();
                     const busanaId = this.getAttribute('data-id');
                     const quantity = parseInt(this.value);
-                    const shippingOption = document.querySelector('input[name="shipping"]:checked')
-                        .value;
+                    const maxStock = parseInt(this.dataset.maxStock);
+                    const row = this.closest('tr');
+                    const totalElement = row.querySelector('.total');
+                    const price = parseInt(row.querySelector('td:nth-child(3)').innerText.replace(
+                        /[^0-9]/g, ""));
+                    const shippingOption = hiddenShippingOption.value;
 
+                    // Validasi stok
+                    if (quantity > maxStock) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Stok Tidak Cukup',
+                            text: 'Jumlah yang dimasukkan melebihi stok yang tersedia.'
+                        });
+
+                        this.value = this.dataset.previousValue || maxStock;
+                        return;
+                    }
+
+                    // Update ke server
                     fetch('{{ route('customer.cart.update') }}', {
                             method: 'POST',
                             headers: {
@@ -178,51 +156,70 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.status === 'success') {
-                                const totalElement = this.closest('tr').querySelector('.total');
-                                const price = parseInt(this.closest('tr').querySelector(
-                                    'td:nth-child(3)').innerText.replace(/[^0-9]/g, ""));
-
-                                const newTotal = Math.round(price * quantity);
-                                totalElement.innerText = 'Rp. ' + newTotal.toLocaleString(
+                                // Hitung total per item
+                                const newTotal = price * quantity;
+                                totalElement.innerText = 'Rp ' + newTotal.toLocaleString(
                                     'id-ID', {
                                         minimumFractionDigits: 0
                                     });
+
+                                // Hitung ulang grand total
                                 updateGrandTotal();
-                            } else {
-                                alert(data.message);
+                            } else if (data.status === 'error') {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal',
+                                    text: data.message
+                                });
+
+                                this.value = this.dataset.previousValue;
                             }
                         });
+
+                    // Simpan nilai sebelumnya
+                    this.dataset.previousValue = this.value;
                 });
             });
 
             shippingOptions.forEach(option => {
                 option.addEventListener('change', function() {
+                    hiddenShippingOption.value = this.value;
                     updateGrandTotal();
+
+                    // Kirim opsi pengiriman baru ke server
+                    fetch('{{ route('customer.cart.update') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            shipping_option: this.value
+                        })
+                    });
                 });
             });
 
             function updateGrandTotal() {
                 let grandTotal = 0;
 
-                // Hitung total dari produk di tabel
+                // Hitung total semua produk di tabel
                 document.querySelectorAll('tbody tr').forEach(row => {
                     const total = parseInt(row.querySelector('.total').innerText.replace(/[^0-9]/g, ""));
                     grandTotal += total;
                 });
 
                 // Tambahkan biaya pengiriman jika pengiriman cepat dipilih
-                const selectedShippingOption = document.querySelector('input[name="shipping"]:checked').value;
-                if (selectedShippingOption === 'fast') {
-                    grandTotal += 10000;
-                }
+                const shippingFee = hiddenShippingOption.value === 'fast' ? 10000 : 0;
+                grandTotal += shippingFee;
 
-                // Perbarui elemen total ringkasan keranjang
+                // Perbarui tampilan grand total
                 grandTotalElement.innerText = 'Rp ' + grandTotal.toLocaleString('id-ID', {
                     minimumFractionDigits: 0
                 });
             }
 
-            // Inisialisasi nilai total saat halaman dimuat
+            // Inisialisasi nilai grand total saat halaman dimuat
             updateGrandTotal();
         });
     </script>
@@ -246,5 +243,15 @@
                 title: "{{ session('success') }}"
             });
         @endif
+
+        @if (session('failed'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: "{{ session('failed') }}"
+            });
+        @endif
+
+        // ...existing code...
     </script>
 @endpush

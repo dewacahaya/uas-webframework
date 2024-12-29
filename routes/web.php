@@ -77,6 +77,10 @@ Route::middleware(['customer.auth'])->group(function () {
     Route::post('/cart/update', [CustomerController::class, 'updateCart'])->name('customer.cart.update');
     Route::post('/cart/remove', [CustomerController::class, 'removeFromCart'])->name('customer.cart.remove');
 
+    Route::get('/checkout', [CustomerController::class, 'showCheckout'])->name('customer.checkout');
+    Route::post('/checkout', [CustomerController::class, 'processCheckout'])->name('checkout.process');
+
+
     Route::get('/orders', [OrderController::class, 'showOrders'])->name('customer.orders');
     Route::post('/orders/create', [OrderController::class, 'createOrder'])->name('customer.order.create');
 

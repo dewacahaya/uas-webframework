@@ -108,17 +108,63 @@ class CustomerController extends Controller
     }
     // END ALL BUSANAS PAGE
 
+    // CART LOGIC
     public function showCart()
     {
         $cart = session()->get('cart', []);
+
+        foreach ($cart as $key => $item) {
+            $busana = Busana::find($key);
+            if ($busana) {
+                $cart[$key]['max_stock'] = $busana->stok;
+            }
+        }
+
         $grandTotal = array_reduce($cart, function ($carry, $item) {
             return $carry + ($item['price'] * $item['quantity']);
         }, 0);
 
-        $shippingOption = session()->get('shipping_option', 'standard');
+        // Tetapkan opsi pengiriman ke sesi jika belum ada
+        if (!session()->has('shipping_option')) {
+            session()->put('shipping_option', 'standard');
+        }
+
+        $shippingOption = session()->get('shipping_option');
 
         return view('customers.transaction.cart', compact('cart', 'grandTotal', 'shippingOption'));
     }
+
+
+    public function updateCart(Request $request)
+    {
+        $busanaId = $request->input('busana_id');
+        $quantity = $request->input('quantity');
+        $shippingOption = $request->input('shipping_option', 'standard');
+
+        $busana = Busana::find($busanaId);
+
+        if (!$busana) {
+            return response()->json(['status' => 'error', 'message' => 'Busana tidak ditemukan.']);
+        }
+
+        if ($quantity > $busana->stok) {
+            return response()->json(['status' => 'error', 'message' => 'Stok tidak mencukupi.']);
+        }
+
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$busanaId])) {
+            $cart[$busanaId]['quantity'] = $quantity;
+            session()->put('cart', $cart);
+        }
+
+        // Perbarui sesi pengiriman
+        session()->put('shipping_option', $shippingOption);
+
+        return response()->json(['status' => 'success', 'message' => 'Keranjang berhasil diperbarui.']);
+    }
+
+
 
     public function addToCart(Request $request)
     {
@@ -147,24 +193,6 @@ class CustomerController extends Controller
         return redirect()->route('customer.cart')->with('success', 'Busana berhasil ditambahkan ke keranjang.');
     }
 
-    public function updateCart(Request $request)
-    {
-        $busanaId = $request->input('busana_id');
-        $quantity = $request->input('quantity');
-        $shippingOption = $request->input('shipping_option', 'standard');
-
-        $cart = session()->get('cart', []);
-
-        if (isset($cart[$busanaId])) {
-            $cart[$busanaId]['quantity'] = $quantity;
-            session()->put('cart', $cart);
-        }
-
-        session()->put('shipping_option', $shippingOption);
-
-        return response()->json(['status' => 'success', 'message' => 'Keranjang berhasil diperbarui.']);
-    }
-
     public function removeFromCart(Request $request)
     {
         $busanaId = $request->input('busana_id');
@@ -178,5 +206,73 @@ class CustomerController extends Controller
         }
 
         return redirect()->route('customer.cart')->with('failed', 'Busana tidak ditemukan di keranjang.');
+    }
+    // END CART LOGIC
+
+    // CHECKOUT LOGIC
+    public function showCheckout()
+    {
+        $cart = session()->get('cart', []);
+
+        if (empty($cart)) {
+            return redirect()->route('customer.cart')->with('error', 'Keranjang Anda kosong.');
+        }
+
+        $grandTotal = array_reduce($cart, function ($carry, $item) {
+            return $carry + ($item['price'] * $item['quantity']);
+        }, 0);
+
+        $shippingOption = session()->get('shipping_option', 'standard');
+        $shippingFee = $shippingOption === 'fast' ? 10000 : 0;
+
+        $customer = auth('customers')->user();
+
+        return view('customers.transaction.checkout', compact('cart', 'grandTotal', 'shippingOption', 'shippingFee', 'customer'));
+    }
+
+
+
+    public function processCheckout(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'required|string|max:15',
+            'address' => 'required|string',
+            'payment_method' => 'required|in:COD,Bank',
+            'shipping_method' => 'required|in:standard,fast,pickup',
+            'shipping_fee' => 'required|numeric',
+        ]);
+
+        $cart = session()->get('cart', []);
+        if (empty($cart)) {
+            return redirect()->route('cart.index')->with('error', 'Keranjang Anda kosong.');
+        }
+
+        $grandTotal = array_reduce($cart, function ($carry, $item) {
+            return $carry + ($item['price'] * $item['quantity']);
+        }, 0) + $request->shipping_fee;
+
+        $order = Order::create([
+            'user_id' => auth('customers')->id(),
+            'tanggal_pesan' => now(),
+            'total_belanja' => $grandTotal,
+            'pengiriman' => $request->shipping_method,
+            'pembayaran' => $request->payment_method,
+            'status_pesanan' => 'Pending',
+        ]);
+
+        foreach ($cart as $item) {
+            $order->orderDetails()->create([
+                'busana_id' => $item['id'],
+                'jumlah' => $item['quantity'],
+                'harga' => $item['price'],
+                'subtotal' => $item['price'] * $item['quantity'],
+            ]);
+        }
+
+        session()->forget(['cart', 'shipping_option']);
+
+        return redirect()->route('customer.orders')->with('success', 'Pesanan berhasil dibuat!');
     }
 }

@@ -11,8 +11,7 @@
                         style="width: 100%; height: auto;">
                     <div class="position-absolute" style="top: 30%; right: 5%; color: white; text-align: right;">
                         <h1 class="fw-bold" style="font-size: 3rem;">Kostum Terbaru</h1>
-                        <a href="{{ route('customer.busanas') }}"
-                            class="btn btn-primary text-white px-4 py-2 mt-3">Lihat</a>
+                        <a href="{{ route('customer.busanas') }}" class="btn btn-dark text-white px-4 py-2 mt-3">Lihat</a>
                     </div>
                 </div>
             </div>
