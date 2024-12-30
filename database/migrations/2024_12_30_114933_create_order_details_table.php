@@ -14,14 +14,15 @@ return new class extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('order_details', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->unsignedInteger('order_id');
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->unsignedInteger('busana_id');
             $table->foreign('busana_id')->references('id')->on('busanas');
             $table->integer('jumlah');
             $table->decimal('harga');
             $table->decimal('subtotal');
+            $table->timestamps();
         });
 
         Schema::enableForeignKeyConstraints();

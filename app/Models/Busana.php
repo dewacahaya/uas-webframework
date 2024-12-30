@@ -20,4 +20,10 @@ class Busana extends Model
     {
         return $this->hasMany(Report::class, 'busana_id');
     }
+
+    public function reduceStock($quantity)
+    {
+        $this->stok -= $quantity;
+        $this->save();
+    }
 }

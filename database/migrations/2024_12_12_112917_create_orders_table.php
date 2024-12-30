@@ -19,11 +19,10 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('customers');
             $table->dateTime('tanggal_pesan');
             $table->decimal('total_belanja');
-            $table->enum('pengiriman', ["Standar","Cepat","Ambil Di Tempat"]);
-            $table->enum('pembayaran', ["COD","Bank"]);
-            $table->enum('status_pesanan', ["Pending","Diproses","Dikemas","Selesai"]);
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->enum('pengiriman', ["Standar", "Cepat", "Ambil Di Tempat"]);
+            $table->enum('pembayaran', ["COD", "Bank"]);
+            $table->enum('status_pesanan', ["Pending", "Diproses", "Dikemas", "Selesai"]);
+            $table->timestamps();
         });
 
         Schema::enableForeignKeyConstraints();

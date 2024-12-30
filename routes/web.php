@@ -81,7 +81,7 @@ Route::middleware(['customer.auth'])->group(function () {
     Route::post('/checkout', [CustomerController::class, 'processCheckout'])->name('checkout.process');
 
 
-    Route::get('/orders', [OrderController::class, 'showOrders'])->name('customer.orders');
+    Route::get('/orders', [CustomerController::class, 'showOrders'])->name('customer.orders');
     Route::post('/orders/create', [OrderController::class, 'createOrder'])->name('customer.order.create');
 
     Route::resource('busanas', BusanaController::class)->except(['destroy']);

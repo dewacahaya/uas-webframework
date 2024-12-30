@@ -74,20 +74,20 @@
                         <form action="" method="GET">
                             <div class="form-check mt-3 mb-3">
                                 <input class="form-check-input" type="radio" name="shipping" id="standard"
-                                    value="standard" {{ $shippingOption == 'standard' ? 'checked' : '' }}>
+                                    value="Standar" {{ $shippingOption == 'Standar' ? 'checked' : '' }}>
                                 <label class="form-check-label border border-2 rounded border-secondary p-2 w-100 fw-bold"
                                     for="standard">Standard
                                     (Gratis)</label>
                             </div>
                             <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="shipping" id="fast" value="fast"
-                                    {{ $shippingOption == 'fast' ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="shipping" id="fast" value="Cepat"
+                                    {{ $shippingOption == 'Cepat' ? 'checked' : '' }}>
                                 <label class="form-check-label border border-2 rounded border-secondary p-2 w-100 fw-bold"
                                     for="fast">Pengiriman Cepat (Rp 10.000)</label>
                             </div>
                             <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="shipping" id="pickup" value="pickup"
-                                    {{ $shippingOption == 'pickup' ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="shipping" id="pickup"
+                                    value="Ambil Di Tempat" {{ $shippingOption == 'Ambil Di Tempat' ? 'checked' : '' }}>
                                 <label class="form-check-label border border-2 rounded border-secondary p-2 w-100 fw-bold"
                                     for="pickup">Ambil di Tempat</label>
                             </div>
@@ -180,25 +180,48 @@
                     this.dataset.previousValue = this.value;
                 });
             });
-
             shippingOptions.forEach(option => {
                 option.addEventListener('change', function() {
                     hiddenShippingOption.value = this.value;
                     updateGrandTotal();
 
-                    // Kirim opsi pengiriman baru ke server
                     fetch('{{ route('customer.cart.update') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            shipping_option: this.value
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                shipping_option: this.value
+                            })
                         })
-                    });
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil',
+                                    text: 'Opsi pengiriman berhasil diperbarui.'
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal',
+                                    text: data.message
+                                });
+                            }
+                        })
+                        .catch(() => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Terjadi kesalahan. Silakan coba lagi.'
+                            });
+                        });
                 });
             });
+
+
 
             function updateGrandTotal() {
                 let grandTotal = 0;
@@ -210,7 +233,7 @@
                 });
 
                 // Tambahkan biaya pengiriman jika pengiriman cepat dipilih
-                const shippingFee = hiddenShippingOption.value === 'fast' ? 10000 : 0;
+                const shippingFee = hiddenShippingOption.value === 'Cepat' ? 10000 : 0;
                 grandTotal += shippingFee;
 
                 // Perbarui tampilan grand total
