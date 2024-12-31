@@ -20,8 +20,7 @@ class AdminController extends Controller
         $salesCount = Order::count();
 
         // Menghitung stok yang terjual berdasarkan total_pesanan di tabel report
-        $soldStock = Busana::join('reports', 'busanas.id', '=', 'reports.busana_id')
-            ->sum('reports.total_pesanan');
+        $soldStock = OrderDetail::sum('jumlah');
 
         // Mengambil data stok busana
         $availableStock = Busana::select('nama_busana', 'stok')->get();
@@ -73,7 +72,6 @@ class AdminController extends Controller
         return redirect()->route('admins.profile')->with('success', 'Data berhasil diubah!');
     }
     // END OF PROFILE LOGIC
-
 
     // LOGIN LOGOUT LOGIC
     public function index()

@@ -93,7 +93,7 @@ class CustomerController extends Controller
     }
     // END REGISTER / LOGIN FUNCTION
 
-    // ALL BUSANAS PAGE
+    // BUSANAS PAGE
     public function showAllBusanas(Request $request)
     {
         $search = $request->input('search');
@@ -107,7 +107,16 @@ class CustomerController extends Controller
 
         return view('customers.homes.busanas', compact('busanas', 'search'));
     }
-    // END ALL BUSANAS PAGE
+
+    public function showDetail($id)
+    {
+        $recommendations = Busana::take(3)->get();
+
+        $busana = Busana::findOrFail($id);
+        return view('customers.homes.busanaDetail', compact('busana', 'recommendations'));
+    }
+    // END BUSANAS PAGE
+
 
     // CART LOGIC
     public function showCart()
@@ -166,6 +175,11 @@ class CustomerController extends Controller
 
         if (!$busana) {
             return redirect()->route('customer.busanas')->with('error', 'Busana tidak ditemukan.');
+        }
+
+        // Cek apakah stok habis
+        if ($busana->stok <= 0) {
+            return redirect()->back()->with('error', 'Stok habis. Tidak dapat menambahkan ke keranjang.');
         }
 
         $cart = session()->get('cart', []);
@@ -241,13 +255,17 @@ class CustomerController extends Controller
         return view('customers.transaction.checkout', compact('cart', 'grandTotal', 'shippingOption', 'shippingFee', 'customer'));
     }
 
-
     public function processCheckout(Request $request)
     {
         try {
+            // Pastikan user login
+            if (!auth('customers')->check()) {
+                return redirect()->route('customer.login')->with('error', 'Anda harus login untuk melakukan checkout.');
+            }
+
             DB::beginTransaction();
 
-            // Validate request
+            // Validasi request
             $request->validate([
                 'name' => 'required',
                 'phone' => 'required',
@@ -256,24 +274,25 @@ class CustomerController extends Controller
                 'payment_method' => 'required|in:COD,Bank'
             ]);
 
+            // Ambil data keranjang
             $cart = session()->get('cart', []);
 
             if (empty($cart)) {
                 throw new \Exception('Keranjang belanja kosong.');
             }
 
-            // Calculate grand total
+            // Hitung total belanja
             $grandTotal = array_reduce($cart, function ($carry, $item) {
                 return $carry + ($item['price'] * $item['quantity']);
             }, 0);
 
-            // Add shipping cost if applicable
+            // Tambahkan biaya pengiriman jika diperlukan
             $shippingFee = $request->shipping_method === 'Cepat' ? 10000 : 0;
             $grandTotal += $shippingFee;
 
-            // Create order
+            // Buat order baru
             $order = Order::create([
-                'user_id' => auth()->id(),
+                'user_id' => auth('customers')->id(),
                 'tanggal_pesan' => now(),
                 'total_belanja' => $grandTotal,
                 'pengiriman' => $request->shipping_method,
@@ -281,7 +300,7 @@ class CustomerController extends Controller
                 'status_pesanan' => 'Pending',
             ]);
 
-            // Create order details
+            // Tambahkan detail pesanan
             foreach ($cart as $busanaId => $item) {
                 $order->orderDetails()->create([
                     'busana_id' => $busanaId,
@@ -290,16 +309,22 @@ class CustomerController extends Controller
                     'subtotal' => $item['price'] * $item['quantity'],
                 ]);
 
-                // Update stock
+                // Update stok
                 $busana = Busana::find($busanaId);
+
+                // Validasi stok sebelum mengurangi
+                if ($busana->stok < $item['quantity']) {
+                    throw new \Exception("Stok busana '{$busana->nama_busana}' tidak mencukupi.");
+                }
+
                 $busana->stok -= $item['quantity'];
                 $busana->save();
             }
 
             DB::commit();
 
-            // Clear cart
-            session()->forget(['cart', 'shipping_option']);
+            // Hapus keranjang dari sesi
+            session()->forget('cart');
 
             return redirect()->route('customer.orders')->with('success', 'Pesanan berhasil dibuat!');
         } catch (\Exception $e) {
@@ -310,6 +335,7 @@ class CustomerController extends Controller
         }
     }
 
+    // END CHECKOUT LOGIC
 
 
     // ORDERS PAGE
@@ -319,9 +345,11 @@ class CustomerController extends Controller
         $user_id = auth('customers')->id(); // Dapatkan ID pelanggan yang sedang login
         $orders = Order::with('orderDetails.busana') // Pastikan relasi 'orderDetails' dan 'product' telah diatur di model
             ->where('user_id', $user_id)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->get();
+        $no = 1;
 
-        return view('customers.transaction.myorder', compact('orders'));
+        return view('customers.transaction.myorder', compact('orders', 'no'));
     }
+    // END ORDERS PAGE
 }

@@ -49,6 +49,8 @@ Route::middleware(['admin.auth'])->group(function () {
 
     // ORDERS
     Route::get('admin/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('admin/orders/show', [OrderController::class, 'orderShow'])->name('orders.show');
+    Route::get('admin/orders/show', [OrderController::class, 'orderDestroy'])->name('orders.destroy');
 
     // REPORTS
     Route::get('admin/reports', [ReportController::class, 'index'])->name('reports.index');
@@ -71,6 +73,8 @@ Route::post('/logout', [CustomerController::class, 'logout'])->name('customer.lo
 Route::middleware(['customer.auth'])->group(function () {
 
     Route::get('/all-busanas', [CustomerController::class, 'showAllBusanas'])->name('customer.busanas');
+    Route::get('/busanas/{id}', [CustomerController::class, 'showDetail'])->name('customer.busana.detail');
+
 
     Route::get('/cart', [CustomerController::class, 'showCart'])->name('customer.cart');
     Route::post('/cart/add', [CustomerController::class, 'addToCart'])->name('customer.cart.add');
@@ -80,9 +84,7 @@ Route::middleware(['customer.auth'])->group(function () {
     Route::get('/checkout', [CustomerController::class, 'showCheckout'])->name('customer.checkout');
     Route::post('/checkout', [CustomerController::class, 'processCheckout'])->name('checkout.process');
 
-
     Route::get('/orders', [CustomerController::class, 'showOrders'])->name('customer.orders');
-    Route::post('/orders/create', [OrderController::class, 'createOrder'])->name('customer.order.create');
 
     Route::resource('busanas', BusanaController::class)->except(['destroy']);
 });

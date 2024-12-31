@@ -1,6 +1,5 @@
 @extends('layouts.admaster')
-@section('content')
-    @extends('layouts.admaster')
+
 @section('content')
     <div class="container-fluid">
         <h2 class="mb-4">Orders Page</h2>
@@ -19,7 +18,7 @@
                     <table class="table table-bordered table-striped mt-1">
                         <thead>
                             <tr class="text-center">
-                                <th>Gambar</th>
+                                <th>No</th>
                                 <th>Nama Pelanggan</th>
                                 <th>Nama Barang</th>
                                 <th>Detail</th>
@@ -28,12 +27,60 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($orders as $order)
+                                <tr>
+                                    <td class="text-center">
+                                        {{ $no++ }}
+                                    </td>
+                                    <td>{{ $order->customer->name }}</td>
+                                    <td>
+                                        <ul class="list-unstyled">
+                                            @foreach ($order->orderDetails as $detail)
+                                                <li>{{ $detail->busana->nama_busana }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <ul class="list-unstyled">
+                                            @foreach ($order->orderDetails as $detail)
+                                                <li>{{ $detail->jumlah }} pcs x Rp.
+                                                    {{ number_format($detail->harga, 0, ',', '.') }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </td>
+                                    <td>{{ $order->status_pesanan }}</td>
+                                    <td class="text-center">
+                                        {{-- EDIT --}}
+                                        <a href="#" class="text-white" data-bs-toggle="modal"
+                                            data-bs-target="#authModal">
+                                            <i class="bi bi-pencil btn btn-info btn-sm"></i></i>
+                                        </a>
 
+                                        <div class="modal fade" id="authModal" aria-labelledby="authModalLabel"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-md text-dark">
+                                                <div class="modal-content">
+                                                    hai
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- HAPUS --}}
+                                        <form action="{{ route('orders.destroy', $order->id) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm"><i
+                                                    class="bi bi-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
 
                     </table>
                     <hr>
-                    {{-- {{ $orders->links() }} --}}
+                    {{ $orders->links() }}
                 </div>
             </div>
 
@@ -81,5 +128,3 @@
         @endif
     </script>
 @endpush
-
-@endsection

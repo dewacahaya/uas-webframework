@@ -10,9 +10,15 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('orders.index');
+        // Fetch orders with related customer and order details
+        $orders = Order::with(['customer', 'orderDetails.busana'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        $no = 1;
+
+        return view('orders.index', compact('orders', 'no'));
     }
 
     public function showOrders()

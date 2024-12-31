@@ -44,7 +44,7 @@
                     <div class="card shadow-sm text-white text-center" style="background-color: #DB3443;">
                         <div class="card-body d-flex flex-column align-items-center justify-content-center">
                             <i class="bi bi-bag-check fs-1 mb-2"></i>
-                            <h4 class="mb-0">Sold Stock</h4>
+                            <h4 class="mb-0">Sold Stocks</h4>
                             <h1 class="fw-bold">{{ $soldStock }}</h1>
                         </div>
                     </div>
@@ -60,7 +60,8 @@
                             @foreach ($availableStock as $busana)
                                 <tr>
                                     <td>{{ $busana->nama_busana }}</td>
-                                    <td class="text-center fw-bold">{{ $busana->stok > 0 ? $busana->stok : 'Stok Habis' }}
+                                    <td class="{{ $busana->stok == 0 ? 'text-danger' : '' }} text-center fw-bold">
+                                        {{ $busana->stok == 0 ? 'Stok Habis' : $busana->stok }}
                                     </td>
                                 </tr>
                             @endforeach

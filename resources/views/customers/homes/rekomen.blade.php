@@ -10,7 +10,7 @@
                     <img src="{{ asset('images/tari-kecak-home.webp') }}" alt="Kostum Terbaru" class="img-fluid rounded"
                         style="width: 100%; height: auto;">
                     <div class="position-absolute" style="top: 30%; right: 5%; color: white; text-align: right;">
-                        <h1 class="fw-bold" style="font-size: 3rem;">Kostum Terbaru</h1>
+                        <h1 class="fw-bold" style="font-size: 3rem;">Lihat Semua</h1>
                         <a href="{{ route('customer.busanas') }}" class="btn btn-dark text-white px-4 py-2 mt-3">Lihat</a>
                     </div>
                 </div>

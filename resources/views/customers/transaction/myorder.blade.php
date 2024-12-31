@@ -14,7 +14,7 @@
                     style="border-spacing: 0; border: 1px solid #bababa;">
                     <thead>
                         <tr class="bg-light">
-                            <th>ID</th>
+                            <th>No</th>
                             <th>Tanggal</th>
                             <th>Status</th>
                             <th>Nama Busana</th>
@@ -25,24 +25,46 @@
                     </thead>
                     <tbody>
                         @foreach ($orders as $order)
-                            @foreach ($order->orderDetails as $detail)
-                                <tr style="height: 60px;">
-                                    <td>{{ $order->id }}</td>
-                                    <td>{{ $order->created_at->format('d/m/Y') }}</td>
-                                    <td>{{ $order->status_pesanan }}</td>
-                                    <td>{{ $detail->busana->nama_busana }}</td>
-                                    <td>{{ number_format($detail->harga, 0, ',', '.') }}</td>
-                                    <td>{{ $detail->jumlah }}</td>
-                                    <td>{{ number_format($detail->subtotal, 0, ',', '.') }}</td>
-                                </tr>
-                            @endforeach
+                            @php
+                                $totalSubtotal = $order->orderDetails->sum('subtotal');
+                            @endphp
+                            <tr style="height: 60px;">
+                                <td>{{ $no++ }}</td>
+                                <td>{{ $order->created_at->format('d/m/Y') }}
+                                </td>
+                                <td>{{ $order->status_pesanan }}</td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @foreach ($order->orderDetails as $detail)
+                                            <li>{{ $detail->busana->nama_busana }}</li>
+                                        @endforeach
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @foreach ($order->orderDetails as $detail)
+                                            <li>{{ number_format($detail->harga, 0, ',', '.') }}</li>
+                                        @endforeach
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @foreach ($order->orderDetails as $detail)
+                                            <li>{{ $detail->jumlah }}</li>
+                                        @endforeach
+                                    </ul>
+                                </td>
+
+                                <td>Rp. {{ number_format($totalSubtotal, 0, ',', '.') }}</td>
+
+                            </tr>
                         @endforeach
 
                         <!-- Button -->
                         <tr style="height: 90px;">
                             <td colspan="7" class="text-end align-middle">
-                                <a href="{{ url('/') }}" class="btn btn-dark rounded-pill px-3">Kembali ke Halaman
-                                    Utama</a>
+                                <a href="{{ route('customer.recommendation') }}"
+                                    class="btn btn-dark rounded-pill px-3 me-3">Kembali</a>
                             </td>
                         </tr>
                     </tbody>
