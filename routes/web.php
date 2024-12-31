@@ -49,11 +49,13 @@ Route::middleware(['admin.auth'])->group(function () {
 
     // ORDERS
     Route::get('admin/orders', [OrderController::class, 'index'])->name('orders.index');
-    Route::get('admin/orders/show', [OrderController::class, 'orderShow'])->name('orders.show');
-    Route::get('admin/orders/show', [OrderController::class, 'orderDestroy'])->name('orders.destroy');
+    Route::delete('admin/orders/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
+    Route::put('/orders/{id}/update-status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+
 
     // REPORTS
     Route::get('admin/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/download/pdf', [ReportController::class, 'exportPDF'])->name('reports.download.pdf');
 });
 
 
@@ -85,6 +87,8 @@ Route::middleware(['customer.auth'])->group(function () {
     Route::post('/checkout', [CustomerController::class, 'processCheckout'])->name('checkout.process');
 
     Route::get('/orders', [CustomerController::class, 'showOrders'])->name('customer.orders');
+    Route::get('/order/complete/{orderId}', [CustomerController::class, 'showCompletePage'])->name('customer.complete');
+
 
     Route::resource('busanas', BusanaController::class)->except(['destroy']);
 });

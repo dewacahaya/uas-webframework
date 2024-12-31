@@ -23,7 +23,8 @@
                 <form action="{{ route('customer.cart.add') }}" method="POST">
                     @csrf
                     <input type="hidden" name="busana_id" value="{{ $busana->id }}">
-                    <button type="submit" class="btn btn-primary" {{ $busana->stok <= 0 ? 'disabled' : '' }}>
+                    <button type="submit" class="btn btn-primary {{ $busana->stok <= 0 ? 'btn-danger' : '' }}"
+                        {{ $busana->stok <= 0 ? 'disabled' : '' }}>
                         {{ $busana->stok <= 0 ? 'Stok Habis' : 'Add to Cart' }}
                     </button>
                 </form>

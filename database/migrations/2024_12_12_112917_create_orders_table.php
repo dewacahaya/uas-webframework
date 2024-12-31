@@ -21,7 +21,7 @@ return new class extends Migration
             $table->decimal('total_belanja');
             $table->enum('pengiriman', ["Standar", "Cepat", "Ambil Di Tempat"]);
             $table->enum('pembayaran', ["COD", "Bank"]);
-            $table->enum('status_pesanan', ["Pending", "Diproses", "Dikemas", "Selesai"]);
+            $table->enum('status_pesanan', ["Pending", "Diproses", "Selesai", "Dibatalkan"]);
             $table->timestamps();
         });
 

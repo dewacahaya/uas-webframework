@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h2 class="text-center my-4">Checkout</h2>
+        <h2 class="text-center fw-bold my-4">Checkout</h2>
 
         <!-- Step Navigation -->
         <div class="d-flex justify-content-center mb-5">

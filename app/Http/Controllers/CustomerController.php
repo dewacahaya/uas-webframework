@@ -326,7 +326,7 @@ class CustomerController extends Controller
             // Hapus keranjang dari sesi
             session()->forget('cart');
 
-            return redirect()->route('customer.orders')->with('success', 'Pesanan berhasil dibuat!');
+            return redirect()->route('customer.complete', ['orderId' => $order->id]);
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()
@@ -334,7 +334,6 @@ class CustomerController extends Controller
                 ->withInput();
         }
     }
-
     // END CHECKOUT LOGIC
 
 
@@ -352,4 +351,21 @@ class CustomerController extends Controller
         return view('customers.transaction.myorder', compact('orders', 'no'));
     }
     // END ORDERS PAGE
+
+    // COMPLETED ORDERS
+    public function showCompletePage($orderId)
+    {
+        // Pastikan user login
+        if (!auth('customers')->check()) {
+            return redirect()->route('customer.login')->with('error', 'Anda harus login untuk melihat pesanan.');
+        }
+
+        // Ambil data pesanan
+        $order = Order::with('orderDetails.busana')->where('id', $orderId)
+            ->where('user_id', auth('customers')->id())
+            ->firstOrFail();
+
+        return view('customers.transaction.complete', compact('order'));
+    }
+    // END COMPLETED ORDERS
 }
