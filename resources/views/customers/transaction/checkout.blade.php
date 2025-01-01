@@ -121,7 +121,7 @@
                                 {{ $shippingFee > 0 ? 'Rp ' . number_format($shippingFee, 0, ',', '.') : 'Gratis' }}
                             </span>
                         </div>
-                        <div class="d-flex justify-content-between fs-5 fw-bold mt-4">
+                        <div class="d-flex justify-content-between fs-5 fw-bold mt-4 mb-3">
                             <span>Total</span>
                             <span>Rp {{ number_format($grandTotal + $shippingFee, 0, ',', '.') }}</span>
                         </div>

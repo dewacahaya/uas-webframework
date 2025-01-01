@@ -7,8 +7,8 @@
         <div class="row align-items-center">
             <div class="col-12">
                 <div class="position-relative">
-                    <img src="{{ asset('images/tari-kecak-home.webp') }}" alt="Kostum Terbaru" class="img-fluid rounded"
-                        style="width: 100%; height: auto;">
+                    <img src="{{ asset('images/pexels-saturnus99-9196830.webp') }}" alt="Tari Kecak" class="rounded-4"
+                        style="width: 100%; height: 600px; object-fit: cover;">
                     <div class="position-absolute" style="top: 30%; right: 5%; color: white; text-align: right;">
                         <h1 class="fw-bold" style="font-size: 3rem;">Lihat Semua</h1>
                         <a href="{{ route('customer.busanas') }}" class="btn btn-dark text-white px-4 py-2 mt-3">Lihat</a>

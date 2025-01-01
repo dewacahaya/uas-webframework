@@ -1,7 +1,7 @@
 @extends('layouts.custmaster')
 
 @section('content')
-    <div class="container my-4">
+    <div class="container my-4" style="padding-bottom: 67px">
         <h1 class="fw-bold mb-4 text-center">Keranjang</h1>
 
         <!-- Step Navigation -->

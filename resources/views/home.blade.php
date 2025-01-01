@@ -12,7 +12,8 @@
         <a href="{{ route('customer.recommendation') }}" class="btn btn-dark text-white fw-bold py-2 w-25">Lihat
             produk</a>
         <div class="mt-5">
-            <img src="{{ asset('images/tari-kecak-home.webp') }}" alt="Tari Kecak" class="w-75 rounded-4">
+            <img src="{{ asset('images/pexels-saturnus99-9196830.webp') }}" alt="Tari Kecak" class="w-75 rounded-4"
+                style="height: 500px; object-fit: cover;">
 
         </div>
 
