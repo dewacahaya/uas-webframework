@@ -34,9 +34,10 @@ class OrderController extends Controller
 
     public function showOrders()
     {
-        $orders = Order::where('user_id', Auth::id())->get();
+        $orders = Order::where('user_id', Auth::id())->with('customer', 'orderDetails.busana')->get();
         return view('customers.orders', compact('orders'));
     }
+
 
     public function createOrder()
     {

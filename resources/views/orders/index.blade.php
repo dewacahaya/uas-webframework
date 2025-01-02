@@ -63,7 +63,7 @@
                                             <div class="modal-dialog modal-dialog-centered modal-lg">
                                                 <div class="modal-content shadow-lg border-0">
                                                     <div class="modal-header bg-primary text-white">
-                                                        <h5 class="modal-title" id="orderDetailModalLabel">Detail Pesanan
+                                                        <h5 class="modal-title" id="orderDetailModalLabel">Detail Pemesan
                                                         </h5>
                                                         <button type="button" class="btn-close btn-close-white"
                                                             data-bs-dismiss="modal" aria-label="Close"></button>
@@ -72,8 +72,20 @@
                                                         <table class="table table-bordered">
                                                             <tbody>
                                                                 <tr>
-                                                                    <th>Nama Pelanggan</th>
+                                                                    <th>Nama Lengkap</th>
                                                                     <td>{{ $order->customer->name }}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Email</th>
+                                                                    <td>{{ $order->customer->email }}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Nomor Telepon</th>
+                                                                    <td>{{ $order->customer->no_telp }}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Alamat</th>
+                                                                    <td>{{ $order->customer->alamat }}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th>Tanggal Pesanan</th>
@@ -105,8 +117,8 @@
                                                         </table>
                                                     </div>
                                                     <div class="modal-footer d-flex justify-content-between">
-                                                        <small class="text-muted">* Pastikan status sudah sesuai sebelum
-                                                            mengupdate.</small>
+                                                        <small class="text-muted">* Pastikan data sudah benar sebelum
+                                                            melanjutkan.</small>
                                                         <form method="POST"
                                                             action="{{ route('orders.updateStatus', $order->id) }}">
                                                             @csrf
@@ -116,20 +128,16 @@
                                                                     id="status_pesanan">
                                                                     <option value="Pending"
                                                                         {{ $order->status_pesanan == 'Pending' ? 'selected' : '' }}>
-                                                                        Pending
-                                                                    </option>
+                                                                        Pending</option>
                                                                     <option value="Diproses"
                                                                         {{ $order->status_pesanan == 'Diproses' ? 'selected' : '' }}>
-                                                                        Diproses
-                                                                    </option>
+                                                                        Diproses</option>
                                                                     <option value="Selesai"
                                                                         {{ $order->status_pesanan == 'Selesai' ? 'selected' : '' }}>
-                                                                        Selesai
-                                                                    </option>
+                                                                        Selesai</option>
                                                                     <option value="Dibatalkan"
                                                                         {{ $order->status_pesanan == 'Dibatalkan' ? 'selected' : '' }}>
-                                                                        Dibatalkan
-                                                                    </option>
+                                                                        Dibatalkan</option>
                                                                 </select>
                                                                 <button type="submit" class="btn btn-primary">Update
                                                                     Status</button>
@@ -139,6 +147,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
 
                                         {{-- HAPUS --}}
                                         <form id="delete-form-{{ $order->id }}"
@@ -189,8 +198,8 @@
                 <h5>Items:</h5>
                 <ul>
                     ${order.order_details.map(detail => `
-                                                                                                                    <li>${detail.busana.nama_busana} - ${detail.jumlah} pcs x Rp. ${detail.harga.toLocaleString('id-ID')}</li>
-                                                                                                                `).join('')}
+                                                                                                                        <li>${detail.busana.nama_busana} - ${detail.jumlah} pcs x Rp. ${detail.harga.toLocaleString('id-ID')}</li>
+                                                                                                                    `).join('')}
                 </ul>
                 <p><strong>Total:</strong> Rp. ${order.total_belanja.toLocaleString('id-ID')}</p>
             `;

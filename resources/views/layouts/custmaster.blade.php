@@ -107,7 +107,9 @@
                                         <div class="tab-pane fade" id="register" role="tabpanel">
                                             <h3 class="text-center fw-bold mb-3">Get Started</h3>
                                             <p class="text-center text-muted mb-4">
-                                                Create your account to get started.
+                                                Create your account to get started. <br>
+                                                <small class="text-muted">* Masukkan data dengan jujur dan valid untuk
+                                                    memudahkan transaksi dan pengiriman</small>
                                             </p>
                                             <form method="POST" action="{{ route('customer.register') }}">
                                                 @csrf
@@ -153,6 +155,7 @@
                                                 </p>
                                             </form>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -172,13 +175,21 @@
 
     <script>
         function switchToRegister() {
+            // Pindah ke tab register
             document.getElementById('login').classList.remove('show', 'active');
             document.getElementById('register').classList.add('show', 'active');
+
+            // Tampilkan teks informasi register
+            document.getElementById('registerInfo').classList.remove('d-none');
         }
 
         function switchToLogin() {
+            // Pindah ke tab login
             document.getElementById('register').classList.remove('show', 'active');
             document.getElementById('login').classList.add('show', 'active');
+
+            // Sembunyikan teks informasi register
+            document.getElementById('registerInfo').classList.add('d-none');
         }
     </script>
 

@@ -45,7 +45,7 @@ class CustomerController extends Controller
             "name" => "required|string|max:255",
             "email" => "required|email|unique:customers,email",
             "password" => "required|string|confirmed",
-            "no_telp" => "required|numeric|max:999999999999999",
+            "no_telp" => "required|numeric|min:12|max:999999999999999",
             "alamat" => "required|string|max:255",
         ]);
 
