@@ -1,5 +1,5 @@
 {"version": 2,
-"framework": "null",
+"framework": "vite",
 
 "functions":{
     "api/index.php": { "runtime": "vercel-php@0.6.0"}
@@ -8,14 +8,14 @@
 
     {
         "src": "/(.*)",
-        "dest": "/api/index.php"
+        "dest": "/public/$1"
     }
 ],
 
 "env": {
     "APP_ENV": "production",
     "APP_DEBUG": "true",
-    "APP_URL": "https://akos-portfolio.vercel.app",
+    "APP_URL": "https://uas-pwf.vercel.app",
 
     "APP_CONFIG_CACHE": "/tmp/config.php",
     "APP_EVENTS_CACHE": "/tmp/events.php",
@@ -28,3 +28,4 @@
     "LOG_CHANNEL": "stderr",
     "SESSION_DRIVER": "cookie"
 }}
+
