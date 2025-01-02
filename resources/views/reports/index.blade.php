@@ -54,7 +54,7 @@
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $report['date'] }}</td>
-                                    <td>{!! $report['busana_names'] !!}</td>
+                                    <td>{!! $report['busana_name'] !!}</td>
                                     <td>{!! $report['quantities'] !!}</td>
                                     <td>{!! $report['prices'] !!}</td>
                                     <td>{{ $report['subtotals'] }}</td>

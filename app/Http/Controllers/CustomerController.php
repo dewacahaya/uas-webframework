@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Busana;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\Report;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -302,7 +303,7 @@ class CustomerController extends Controller
 
             // Tambahkan detail pesanan
             foreach ($cart as $busanaId => $item) {
-                $order->orderDetails()->create([
+                $orderDetail = $order->orderDetails()->create([
                     'busana_id' => $busanaId,
                     'jumlah' => $item['quantity'],
                     'harga' => $item['price'],
@@ -319,6 +320,19 @@ class CustomerController extends Controller
 
                 $busana->stok -= $item['quantity'];
                 $busana->save();
+
+                // Simpan data ke tabel reports
+                Report::updateOrCreate(
+                    [
+                        'busana_id' => $busanaId,
+                        'bulan' => now()->format('m'),
+                        'tahun' => now()->format('Y'),
+                    ],
+                    [
+                        'total_pesanan' => DB::raw('total_pesanan + ' . $item['quantity']),
+                        'total_penjualan' => DB::raw('total_penjualan + ' . $item['price'] * $item['quantity']),
+                    ]
+                );
             }
 
             DB::commit();
@@ -334,6 +348,7 @@ class CustomerController extends Controller
                 ->withInput();
         }
     }
+
     // END CHECKOUT LOGIC
 
 

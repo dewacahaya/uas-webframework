@@ -17,29 +17,24 @@ class ReportController extends Controller
         $tahun = $request->input('tahun', date('Y'));
         $no = 1;
 
-        // Fetch data and group by date
-        $reports = OrderDetail::with(['busana', 'order'])
+        // Ambil data dari tabel reports
+        $aggregatedReports = Report::with('busana')
             ->whereMonth('created_at', $bulan)
             ->whereYear('created_at', $tahun)
             ->get()
-            ->groupBy(function ($item) {
-                return $item->order->created_at->format('Y-m-d');
+            ->map(function ($report) {
+                return [
+                    'date' => now()->format('d/m/Y'), // Tambahkan kolom jika ingin tanggal
+                    'busana_name' => $report->busana->nama_busana,
+                    'quantities' => $report->total_pesanan,
+                    'prices' => 'Rp. ' . number_format($report->total_penjualan, 0, ',', '.'),
+                    'subtotals' => 'Rp. ' . number_format($report->total_penjualan, 0, ',', '.'),
+                ];
             });
-
-        // Aggregate the grouped data
-        $aggregatedReports = $reports->map(function ($dailyReports) {
-            $totalSubtotal = $dailyReports->sum('subtotal');
-            return [
-                'date' => $dailyReports->first()->order->created_at->format('d/m/Y'),
-                'busana_names' => $dailyReports->map(fn($report) => $report->busana->nama_busana)->unique()->implode('<br>'),
-                'quantities' => $dailyReports->groupBy('busana_id')->map(fn($items) => $items->sum('jumlah'))->implode('<br>'),
-                'prices' => $dailyReports->groupBy('busana_id')->map(fn($items) => 'Rp. ' . number_format($items->first()->harga, 0, ',', '.'))->implode('<br>'),
-                'subtotals' => 'Rp. ' . number_format($totalSubtotal, 0, ',', '.'),
-            ];
-        });
 
         return view('reports.index', compact('aggregatedReports', 'bulan', 'tahun', 'no'));
     }
+
 
     public function exportPDF(Request $request)
     {
@@ -47,7 +42,8 @@ class ReportController extends Controller
         $tahun = $request->tahun;
 
         // Fetch laporan berdasarkan bulan dan tahun
-        $reports = Report::whereYear('created_at', $tahun)
+        $reports = Report::with('busana')
+            ->whereYear('created_at', $tahun)
             ->whereMonth('created_at', $bulan)
             ->get();
 
