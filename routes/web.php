@@ -47,3 +47,8 @@ Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.u
 Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.index');
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+
+Route::get('/order', function () {
+    return view('customers.order');
+
+});
