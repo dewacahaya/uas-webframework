@@ -7,31 +7,21 @@
     <title>Login Form</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background: url('https://images.unsplash.com/photo-1511164657592-59a452023479?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-            background-size: cover;
-        }
-
         .form-container {
             min-height: 100vh;
-            width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
+            background-color: #f0f2f5;
         }
 
         .form-card {
             width: 100%;
             max-width: 400px;
             padding: 20px;
-            color: white;
+            background: #ffffff;
+            border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
@@ -39,11 +29,11 @@
 <body>
     <div class="container form-container">
         <div class="form-card">
-            <h2 class="mb-4 fs-1 text-center fw-bold">Login</h2>
+            <h4 class="mb-4 fs-3 text-center fw-bold">Login Ke Dashboard</h4>
             <form method="POST" action="{{ route('login.proses') }}">
                 @csrf
                 <!-- Input Email -->
-                <div class="mb-3 fw-semibold">
+                <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Email</label>
                     <input type="text" name="email" class="form-control" id="exampleInputEmail1"
                         aria-describedby="emailHelp" placeholder="Masukkan Email">
@@ -63,8 +53,9 @@
                     @enderror
                 </div>
 
+
                 <!-- Tombol Login -->
-                <button type="submit" class="btn btn-primary w-100 fs-5">Login</button>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
 
             </form>
         </div>
